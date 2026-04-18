@@ -1,0 +1,34 @@
+metric:
+  name: "mse"
+  direction: minimize
+  target: 0.01
+  min_relative_improvement: 0.1
+
+baselines:
+  baseline: 1.0
+
+eval:
+  timeout: 60
+  seeds: 3
+
+compute:
+  backend: local
+  gpu: null
+  cpu: 2
+  memory: 2048
+  timeout: 300
+
+execution:
+  parallel_agents: 1
+  budget: null
+  max_orbits: 2
+  milestone_interval: 2
+  design_iterations: 1
+  brainstorm_debate_rounds: 1
+
+agents:
+  orbit-agent: { model: opus }
+  campaign-reviewer: { model: opus }
+  orbit-reviewer: { model: sonnet }
+  brainstorm-panel: { model: opus }
+  debate-swarm: { model: sonnet }
