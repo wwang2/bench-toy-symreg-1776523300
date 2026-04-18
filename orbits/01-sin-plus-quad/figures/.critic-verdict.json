@@ -1,0 +1,23 @@
+{
+  "verdict": "ACCEPT",
+  "rounds": 1,
+  "invoked_via": "Agent(subagent_type=figure-critic)",
+  "overall_comment": "Both required figures are clean, style-guide-compliant, and communicate the analytical-zero MSE result convincingly; only cosmetic minors.",
+  "figures": [
+    {
+      "path": "orbits/01-sin-plus-quad/figures/narrative.png",
+      "issues": [
+        {"severity": "MINOR", "issue": "The numeric metric value (MSE = 0.00e+00) is not explicitly inline-annotated on the narrative panel; reader has to infer 'fit is near-perfect' from the residual band plot.", "fix": "Add a small text annotation in the top panel, e.g. ax.text(0.02, 0.95, 'MSE = 0.00e+00 (TARGET HIT, <0.01)', transform=ax.transAxes, fontsize=10)."},
+        {"severity": "MINOR", "issue": "Callout annotation text 'even envelope = 0.1 x^2' with parenthetical (1/2)[y(-4)+y(4)] ~= 1.6 is slightly dense and nearly collides with the title/top spine.", "fix": "Move callouts down ~5% in axes-fraction coordinates or shorten parenthetical."}
+      ]
+    },
+    {
+      "path": "orbits/01-sin-plus-quad/figures/results.png",
+      "issues": [
+        {"severity": "MINOR", "issue": "The 'our fit' bar sits at ~1e-19 on a log axis but is labeled 0.00e+00 - log(0) is undefined, so the tiny visible sliver is a plotting floor artifact that may confuse a careful reader.", "fix": "Clip y-axis at 1e-16 and annotate as 'MSE = 0 (exact)' or replace with a downward-arrow marker."},
+        {"severity": "MINOR", "issue": "Right-hand panel is mostly whitespace - per-seed table and 'TARGET HIT' banner read as a footnote.", "fix": "Use GridSpec width_ratios=[2, 1] or enlarge table font to fontsize=12."},
+        {"severity": "MINOR", "issue": "No cross-seed variance shown; acceptable since evaluator is deterministic but a 'std = 0.00e+00 (deterministic)' row would pre-empt skepticism.", "fix": "Add a 'std = 0.00e+00' row to the per-seed table."}
+      ]
+    }
+  ]
+}

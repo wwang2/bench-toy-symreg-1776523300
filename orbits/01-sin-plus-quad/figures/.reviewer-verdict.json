@@ -1,0 +1,44 @@
+{
+  "reviewer": "orbit-reviewer",
+  "orbit": "01-sin-plus-quad",
+  "code_quality": {
+    "status": "clean",
+    "findings": [
+      {"tag": "CODE NOTE", "text": "solution.py is minimal and correct: `np.sin(x) + 0.1 * x**2` with only numpy as a dependency. No sklearn, scipy.optimize, or fitting loops present - constraint compliance confirmed."},
+      {"tag": "CODE NOTE", "text": "make_figures.py hardcodes `y_test = np.sin(x_test) + 0.1 * x_test**2` directly rather than importing `generate_test_data()`. Not a bug (formula identical) but a duplication that would silently diverge if the benchmark target ever changed."}
+    ]
+  },
+  "significance": {
+    "verified_metric": 0.0,
+    "delta_baseline_abs": 1.0,
+    "delta_baseline_rel_pct": 100.0,
+    "delta_best_abs": 1.0,
+    "delta_best_rel_pct": 100.0,
+    "vs_threshold": "above",
+    "vs_2sigma": "above",
+    "assessment": "Significant",
+    "suspicious_improvement": true
+  },
+  "reproducibility": {
+    "status": "clean",
+    "findings": [
+      {"tag": "REPRODUCIBILITY", "text": "The evaluator's `--seed` CLI arg is silently unused in the metric path (test set is fixed at seed=99 inside generate_test_data). Documented in log but could confuse readers expecting seed variation."}
+    ]
+  },
+  "figures": {
+    "status": "has_issues",
+    "findings": [
+      {"tag": "FIGURE ISSUE", "path": "orbits/01-sin-plus-quad/figures/narrative.png", "text": "No panel labels (a)(b)(c) on the two-panel figure.", "fix": "Add `ax.text(-0.08, 1.05, '(a)', transform=ax.transAxes, fontsize=14, fontweight='bold')` per panel."},
+      {"tag": "FIGURE ISSUE", "path": "orbits/01-sin-plus-quad/figures/results.png", "text": "No panel labels (a)(b)(c) on the two-panel figure.", "fix": "Add panel label '(a)' to axL and '(b)' to axR using transAxes."},
+      {"tag": "FIGURE ISSUE", "path": "orbits/01-sin-plus-quad/figures/results.png", "text": "'Our fit' bar rendered at floor clamp value (1e-19) rather than its true value (0.0); visually misleading on a log scale.", "fix": "Replace the bar with a downward-pointing marker or 'MSE = 0 (exact)' annotation at the y-axis floor."}
+    ]
+  },
+  "quality_hints": {
+    "findings": [
+      {"tag": "QUALITY NOTE", "text": "100% relative improvement triggers the >50% suspicious-improvement heuristic. Fully explained and expected: the solution reproduces the exact target formula, so IEEE-754 subtraction yields bit-identical zero. The log documents this including the 'exact zero as artifact of toy benchmark' caveat - no gaming concern."},
+      {"tag": "QUALITY NOTE", "text": "No `research/references/registry.yaml` on the orbit branch. The Cranmer 2023 PySR citation should be added there if the campaign uses a registry."},
+      {"tag": "QUALITY NOTE", "text": "make_figures.py duplicates the target formula inline instead of importing `generate_test_data()` from the evaluator."}
+    ]
+  },
+  "synopsis": "Orbit 01-sin-plus-quad achieves MSE=0.0 (exact floating-point zero) by correctly identifying the target formula `sin(x) + 0.1*x^2` via parity decomposition - a clean, constraint-compliant solution with no fitting loops, sklearn, or scipy. Code matches the prose exactly. The two figures are legible and informative but both lack panel labels (a)(b)(c) required by style.md, and the log-scale bar chart uses a floor-clamped proxy bar for the zero-MSE result that is visually misleading. No reproducibility or correctness concerns."
+}
